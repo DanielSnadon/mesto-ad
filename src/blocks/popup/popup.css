@@ -34,7 +34,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  /*Стили для плавного появления модалки*/
+  
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
