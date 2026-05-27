@@ -1,4 +1,4 @@
-import { createCardElement, deleteCard, likeCard } from "./components/card.js";
+import { createCardElement, deleteCard, updateCardLikes } from "./components/card.js";
 import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 import {
@@ -154,13 +154,10 @@ const handlePreviewPicture = ({ name, link }) => {
   openModalWindow(imageModalWindow);
 };
 
-const handleLikeCard = (cardData, likeButton, likeCountElement) => {
-  const isLiked = cardData.likes.some((user) => user._id === currentUserId);
-
+const handleLikeCard = (cardData, isLiked, likeButton, likeCountElement) => {
   changeLikeCardStatus(cardData._id, isLiked)
     .then((updatedCard) => {
-      cardData.likes = updatedCard.likes;
-      likeCard(likeButton, likeCountElement, updatedCard.likes, currentUserId);
+      updateCardLikes(cardData, likeButton, likeCountElement, updatedCard.likes, currentUserId);
     })
     .catch((err) => {
       console.error(err);
@@ -202,7 +199,6 @@ const handleProfileFormSubmit = (evt) => {
     .then((userData) => {
       renderUserInfo(userData);
       closeModalWindow(profileFormModalWindow);
-      clearValidation(profileForm, validationSettings);
     })
     .catch((err) => {
       console.error(err);
@@ -224,8 +220,6 @@ const handleAvatarFormSubmit = (evt) => {
     .then((userData) => {
       renderUserInfo(userData);
       closeModalWindow(avatarFormModalWindow);
-      avatarForm.reset();
-      clearValidation(avatarForm, validationSettings);
     })
     .catch((err) => {
       console.error(err);
@@ -248,8 +242,6 @@ const handleCardFormSubmit = (evt) => {
     .then((cardData) => {
       renderCard(cardData, "prepend");
       closeModalWindow(cardFormModalWindow);
-      cardForm.reset();
-      clearValidation(cardForm, validationSettings);
     })
     .catch((err) => {
       console.error(err);
